@@ -1,0 +1,26 @@
+<aside class="w-64 bg-white border-r border-gray-200 hidden md:block">
+    <div class="p-6 border-b border-gray-100">
+        <h2 class="text-xl font-extrabold text-blue-700">DriveGuard</h2>
+        <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-semibold">User Portal</p>
+    </div>
+    <nav class="p-4 space-y-1">
+        <a href="/user/dashboard" class="flex items-center px-4 py-3 <%= typeof activeTab !== 'undefined' && activeTab === 'dashboard' ? 'bg-blue-50 text-blue-700 rounded-xl font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium' %> transition-colors">
+            <i class="fas fa-home w-5 mr-3"></i> Dashboard
+        </a>
+        <a href="/user/claims" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-bold <%= typeof activeTab !== 'undefined' && activeTab === 'claims' ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900' %>">
+            <i class="fas fa-clipboard-check text-lg"></i>
+            <span class="text-sm">My Claims</span>
+        </a>
+        <a href="/user/profile" class="flex items-center px-4 py-3 <%= typeof activeTab !== 'undefined' && activeTab === 'profile' ? 'bg-blue-50 text-blue-700 rounded-xl font-bold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium' %> transition-colors">
+            <i class="fas fa-user w-5 mr-3"></i> Profile
+        </a>
+        
+        <hr class="my-4 border-gray-100">
+        
+        <form action="/api/user/logout" method="POST" class="w-full">
+            <button type="submit" class="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl font-medium transition-colors">
+                <i class="fas fa-sign-out-alt w-5 mr-3"></i> Logout
+            </button>
+        </form>
+    </nav>
+</aside>

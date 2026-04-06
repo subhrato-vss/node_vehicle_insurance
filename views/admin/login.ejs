@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+
+<div class="max-w-md mx-auto py-24">
+    <div class="bg-white p-10 rounded-3xl shadow-2xl border border-gray-100">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-lock text-3xl text-blue-600"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-gray-900">Admin Portal</h2>
+            <p class="text-gray-500 mt-2">Sign in to manage the platform</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div id="loginError" class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded shadow-sm hidden items-center gap-3">
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="error-text"></span>
+            </div>
+            <div class="space-y-2">
+                <label for="email" class="block font-bold text-gray-700">Email Address</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    <input type="email" id="email" name="email" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="admin@example.com" required>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="password" class="block font-bold text-gray-700">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        <i class="fas fa-key"></i>
+                    </span>
+                    <input type="password" id="password" name="password" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all text-lg tracking-wide uppercase">
+                Login <i class="fas fa-sign-in-alt ml-2"></i>
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-gray-400 mt-8 italic">
+            Authorized access only. Security systems active.
+        </p>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

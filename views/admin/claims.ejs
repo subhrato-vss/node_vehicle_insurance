@@ -1,0 +1,141 @@
+<%- include('../partials/admin-header') %>
+
+<div class="flex min-h-screen bg-gray-100">
+    <%- include('../partials/admin-sidebar', { activeTab: 'claims' }) %>
+
+    <main class="flex-1 p-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-slate-900">Claims Management</h1>
+                    <p class="text-slate-500 mt-1">Review and process insurance claim requests.</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2">
+                    <a href="/admin/claims" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= !currentFilter ? 'bg-slate-900 icon-white text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">All</a>
+                    <a href="/admin/claims?status=submitted" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= currentFilter === 'submitted' ? 'bg-slate-400 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">Submitted</a>
+                    <a href="/admin/claims?status=under_review" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= currentFilter === 'under_review' ? 'bg-amber-500 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">Under Review</a>
+                    <a href="/admin/claims?status=docs_verified" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= currentFilter === 'docs_verified' ? 'bg-blue-600 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">Verified</a>
+                    <a href="/admin/claims?status=approved" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= currentFilter === 'approved' ? 'bg-emerald-600 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">Approved</a>
+                    <a href="/admin/claims?status=paid" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= currentFilter === 'paid' ? 'bg-indigo-600 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">Paid</a>
+                    <a href="/admin/claims?status=rejected" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider <%= currentFilter === 'rejected' ? 'bg-rose-600 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50' %>">Rejected</a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                        <tr>
+                            <th class="px-6 py-4">Claim ID</th>
+                            <th class="px-6 py-4">User & Policy</th>
+                            <th class="px-6 py-4">Stage / Status</th>
+                            <th class="px-6 py-4">Proof Documents</th>
+                            <th class="px-6 py-4 text-right">Amnt / Payout</th>
+                            <th class="px-6 py-4 text-center">Process Workflow</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <% if (claims.length === 0) { %>
+                            <tr><td colspan="6" class="px-6 py-12 text-center text-slate-400 font-bold">No claims found.</td></tr>
+                        <% } else { %>
+                            <% claims.forEach(claim => { %>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <!-- ID -->
+                                    <td class="px-6 py-4">
+                                        <span class="font-bold text-slate-900 uppercase">#CLM-<%= claim.id %></span>
+                                    </td>
+
+                                    <!-- User & Policy -->
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <span class="font-bold text-slate-900"><%= claim.user_name %></span>
+                                            <span class="text-[10px] text-blue-600 font-bold"><%= claim.policy_number %></span>
+                                        </div>
+                                    </td>
+
+                                    <!-- Stage / Status -->
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col gap-1">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider 
+                                                <%= claim.status === 'submitted' ? 'bg-slate-100 text-slate-600' : 
+                                                    claim.status === 'under_review' ? 'bg-amber-100 text-amber-700' : 
+                                                    claim.status === 'docs_verified' ? 'bg-blue-100 text-blue-700' : 
+                                                    claim.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 
+                                                    claim.status === 'paid' ? 'bg-indigo-100 text-indigo-700' : 'bg-rose-100 text-rose-700' %>">
+                                                <%= claim.status.replace('_', ' ') %>
+                                            </span>
+                                            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage <%= claim.current_stage %>/5</p>
+                                        </div>
+                                    </td>
+
+                                    <!-- Documents -->
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col gap-1.5">
+                                            <% if (claim.documents && claim.documents.length > 0) { %>
+                                                <% claim.documents.forEach(doc => { %>
+                                                    <div class="flex items-center gap-2">
+                                                        <a href="<%= doc.file_path %>" target="_blank" class="px-2 py-1 bg-slate-50 text-slate-600 rounded text-[10px] font-bold hover:bg-white border border-slate-200 flex-1">
+                                                            <i class="fas fa-file-alt mr-1"></i> <%= doc.document_type %>
+                                                        </a>
+                                                        <% if (claim.status === 'under_review') { %>
+                                                            <button onclick="verifyDoc(<%= claim.id %>, <%= doc.id %>, true)" class="<%= doc.is_verified ? 'text-emerald-500' : 'text-slate-300 hover:text-emerald-500' %> transition-colors">
+                                                                <i class="fas fa-check-circle"></i>
+                                                            </button>
+                                                        <% } else if (doc.is_verified) { %>
+                                                            <i class="fas fa-check-circle text-emerald-500 text-xs"></i>
+                                                        <% } %>
+                                                    </div>
+                                                <% }) %>
+                                            <% } %>
+                                        </div>
+                                    </td>
+
+                                    <!-- Amount / Payout -->
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex flex-col">
+                                            <span class="font-bold text-slate-900 text-xs">₹<%= parseFloat(claim.claim_amount).toLocaleString('en-IN') %></span>
+                                            <% if (claim.payout_amount > 0) { %>
+                                                <span class="font-black text-emerald-600 text-[10px] uppercase tracking-tighter">Payout: ₹<%= parseFloat(claim.payout_amount).toLocaleString('en-IN') %></span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+
+                                    <!-- Workflow Actions -->
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <% if (claim.status === 'submitted') { %>
+                                                <button onclick="advanceStage(<%= claim.id %>, 'move-to-review')" class="w-full px-4 py-2 bg-amber-500 text-white text-[10px] font-black rounded-lg hover:bg-amber-600 shadow-sm transition-all uppercase tracking-wider">Start Review</button>
+                                            <% } else if (claim.status === 'under_review') { %>
+                                                <% const allVerified = claim.documents.every(d => d.is_verified === 1); %>
+                                                <% if (allVerified) { %>
+                                                    <button onclick="advanceStage(<%= claim.id %>, 'verify-docs', { verifications: [] })" class="w-full px-4 py-2 bg-blue-600 text-white text-[10px] font-black rounded-lg hover:bg-blue-700 shadow-sm transition-all uppercase tracking-wider">Finalize Verification</button>
+                                                <% } else { %>
+                                                    <span class="text-[10px] font-bold text-amber-600 italic">Verify all documents</span>
+                                                <% } %>
+                                            <% } else if (claim.status === 'docs_verified') { %>
+                                                <button onclick="advanceStage(<%= claim.id %>, 'approve-payout')" class="w-full px-4 py-2 bg-emerald-600 text-white text-[10px] font-black rounded-lg hover:bg-emerald-700 shadow-sm transition-all uppercase tracking-wider">Approve Payout (90%)</button>
+                                            <% } else if (claim.status === 'approved') { %>
+                                                <button onclick="advanceStage(<%= claim.id %>, 'process-payout')" class="w-full px-4 py-2 bg-indigo-600 text-white text-[10px] font-black rounded-lg hover:bg-indigo-700 shadow-sm transition-all uppercase tracking-wider">Process & Mark Paid</button>
+                                            <% } else if (claim.status === 'paid') { %>
+                                                <span class="text-xs font-bold text-slate-400">Claims Processed ✔</span>
+                                            <% } %>
+
+                                            <% if (claim.status !== 'paid' && claim.status !== 'rejected') { %>
+                                                <button onclick="rejectClaim(<%= claim.id %>)" class="text-[9px] font-bold text-rose-500 hover:text-rose-700 underline uppercase tracking-widest">Reject Claim</button>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/claimWorkflow.js"></script>
+
+<%- include('../partials/footer') %>

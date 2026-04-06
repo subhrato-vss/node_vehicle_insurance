@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom Tom Select Styling to match Tailwind */
+.ts-control {
+    padding: 1rem !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid #e5e7eb !important;
+    background-color: #f9fafb !important;
+    transition: all 0.2s !important;
+}
+
+.ts-control:focus {
+    background-color: #fff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+}
+
+.ts-dropdown {
+    border-radius: 0.75rem !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #f3f4f6 !important;
+    padding: 0.5rem !important;
+}
+
+.ts-dropdown .option.active {
+    background-color: #eff6ff !important;
+    color: #1d4ed8 !important;
+    border-radius: 0.5rem !important;
+}
+
+/* Animations */
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+    animation: fadeInScale 0.3s ease-out forwards;
+}
+
+/* ─── Stepper Panel Transitions ─────────────────────── */
+@keyframes stepperSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes stepperSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+}
+
+.stepper-panel-enter {
+    animation: stepperSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.stepper-panel-exit {
+    animation: stepperSlideOut 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── Validation Error Styling ──────────────────────── */
+.validation-error {
+    color: #ef4444;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.5rem;
+    background: #fef2f2;
+    border-radius: 0.5rem;
+    border-left: 3px solid #ef4444;
+}
+
+.validation-error.hidden {
+    display: none;
+}
+
+/* ─── Step Indicator Pulse ──────────────────────────── */
+@keyframes stepPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+}
+
+/* ─── Radio Card Focus ──────────────────────────────── */
+.fuel-radio-card input:focus-visible + div {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* ─── Select Focus Enhancement ──────────────────────── */
+select:focus {
+    background-color: #fff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+    outline: none;
+}
+
+/* ─── Plan Card Styles ──────────────────────────────── */
+.plan-card {
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    position: relative;
+}
+
+.plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+.plan-card.plan-selected {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3);
+}
+
+/* Staggered entrance */
+@keyframes planCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.plan-card-enter:nth-child(1) { animation: planCardIn 0.5s 0.05s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+.plan-card-enter:nth-child(2) { animation: planCardIn 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+.plan-card-enter:nth-child(3) { animation: planCardIn 0.5s 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+
+/* Recommended badge pulse */
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0); }
+}
+
+.plan-recommended-badge {
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+/* ─── Add-on Card Styles ────────────────────────────── */
+.addon-card {
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.addon-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px -6px rgba(0, 0, 0, 0.1);
+}
+
+.addon-card:active {
+    transform: scale(0.985);
+}
+
+/* Staggered entrance for add-on cards */
+@keyframes addonSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.addon-card-enter {
+    animation: addonSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--delay, 0s);
+    opacity: 0;
+}
+
+.addon-card-enter:nth-child(1) { animation-delay: 0.05s; }
+.addon-card-enter:nth-child(2) { animation-delay: 0.12s; }
+.addon-card-enter:nth-child(3) { animation-delay: 0.19s; }
+.addon-card-enter:nth-child(4) { animation-delay: 0.26s; }
+
+/* Checkbox transition */
+.addon-checkbox {
+    transition: all 0.25s ease;
+}
+
+/* Final premium scale animation */
+#summaryFinalPremium {
+    transition: transform 0.2s ease;
+}
+
+/* ─── Customer Form Styles ──────────────────────────── */
+.cust-input {
+    transition: all 0.3s ease;
+}
+
+.cust-input:focus {
+    background-color: #fff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08) !important;
+    outline: none;
+}
+
+.cust-input.input-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08) !important;
+}
+
+/* Step 5 field staggered entrance */
+@keyframes fieldSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+#step5Panel .space-y-5 > * {
+    animation: fieldSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+}
+#step5Panel .space-y-5 > *:nth-child(1) { animation-delay: 0.05s; }
+#step5Panel .space-y-5 > *:nth-child(2) { animation-delay: 0.10s; }
+#step5Panel .space-y-5 > *:nth-child(3) { animation-delay: 0.15s; }
+#step5Panel .space-y-5 > *:nth-child(4) { animation-delay: 0.20s; }
+#step5Panel .space-y-5 > *:nth-child(5) { animation-delay: 0.25s; }
+#step5Panel .space-y-5 > *:nth-child(6) { animation-delay: 0.30s; }

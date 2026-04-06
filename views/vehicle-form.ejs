@@ -1,0 +1,239 @@
+<%- include('partials/header') %>
+
+<script>
+    window.RAZORPAY_TEST_KEY = "<%= razorpayKey %>";
+</script>
+
+<div class="max-w-3xl mx-auto py-12">
+    <div class="bg-white p-10 rounded-3xl shadow-2xl border border-gray-100">
+        <!-- Header -->
+        <div class="flex items-center gap-6 mb-6 border-b pb-6">
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center">
+                <i class="fas fa-<%= type === 'car' ? 'car' : 'motorcycle' %> text-3xl text-blue-600"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-extrabold text-gray-900 capitalize"><%= type %> Insurance</h2>
+                <p class="text-gray-500">Complete the steps below to get your quote</p>
+            </div>
+        </div>
+
+        <!-- Step Indicator (6 Steps) -->
+        <div id="stepIndicatorBar" class="flex items-center justify-center gap-0 mb-10 px-0">
+            <% const stepNames = ['Vehicle', 'Details', 'Plan', 'Add-ons', 'Customer', 'Payment']; %>
+            <% for (let i = 1; i <= 6; i++) { %>
+                <div class="flex items-center gap-1 step-indicator" data-step="<%= i %>">
+                    <div id="stepCircle<%= i %>" class="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-500 <%= i === 1 ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 ring-4 ring-blue-100' : 'bg-gray-200 text-gray-500' %>"><%= i %></div>
+                    <span id="stepLabel<%= i %>" class="text-[10px] font-medium <%= i === 1 ? 'font-bold text-blue-700' : 'text-gray-400' %> hidden md:inline transition-colors duration-300"><%= stepNames[i-1] %></span>
+                </div>
+                <% if (i < 6) { %>
+                <div class="flex-1 mx-1 h-0.5 rounded-full bg-gray-200 overflow-hidden">
+                    <div id="stepConnector<%= i %><%= i+1 %>" class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-700 ease-out" style="width: 0%;"></div>
+                </div>
+                <% } %>
+            <% } %>
+        </div>
+
+        <!-- Stepper Form -->
+        <form id="vehicleForm" novalidate>
+            <input type="hidden" id="vehicleType" value="<%= type %>">
+
+            <!-- ═══ STEP 1: Vehicle ═══ -->
+            <div id="step1Panel" class="stepper-panel">
+                <div class="space-y-7">
+                    <div class="space-y-2">
+                        <label for="brandSelect" class="block font-bold text-gray-700 text-lg">Select Brand</label>
+                        <p class="text-sm text-gray-400 mb-2">Search or select your vehicle manufacturer</p>
+                        <select id="brandSelect" name="brand" placeholder="Search brands..." autocomplete="off"><option value="">Select a brand</option></select>
+                        <div id="brandError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please select a brand</div>
+                    </div>
+                    <div id="modelContainer" class="space-y-2 opacity-30 transition-opacity duration-300">
+                        <label for="modelSelect" class="block font-bold text-gray-700 text-lg">Select Model</label>
+                        <select id="modelSelect" name="model" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed" disabled><option value="">First select a brand</option></select>
+                        <div id="modelError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please select a model</div>
+                    </div>
+                    <div id="variantContainer" class="space-y-2 opacity-30 transition-opacity duration-300">
+                        <label for="variantSelect" class="block font-bold text-gray-700 text-lg">Select Variant</label>
+                        <select id="variantSelect" name="variant" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed" disabled><option value="">First select a model</option></select>
+                        <div id="variantError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please select a variant</div>
+                    </div>
+                </div>
+                <button type="button" id="btnStep1Next" class="stepper-btn-next w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all mt-6 uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-lg" disabled>Next Step <i class="fas fa-arrow-right ml-2"></i></button>
+            </div>
+
+            <!-- ═══ STEP 2: Details ═══ -->
+            <div id="step2Panel" class="stepper-panel hidden">
+                <div class="space-y-7">
+                    <div class="space-y-2">
+                        <label for="yearSelect" class="block font-bold text-gray-700 text-lg"><i class="fas fa-calendar-alt text-blue-500 mr-2"></i>Manufacturing Year</label>
+                        <select id="yearSelect" name="year" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"><option value="">Select year</option></select>
+                        <div id="yearError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please select a year</div>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="block font-bold text-gray-700 text-lg"><i class="fas fa-gas-pump text-blue-500 mr-2"></i>Fuel Type</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="fuel-radio-card group"><input type="radio" name="fuel" value="petrol" class="hidden peer"><div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer transition-all duration-300 hover:border-blue-300 hover:bg-blue-50/50 peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:shadow-lg peer-checked:shadow-blue-100"><i class="fas fa-gas-pump text-2xl mb-2 text-gray-400 group-[&:has(:checked)]:text-blue-600 transition-colors"></i><p class="font-bold text-gray-700 text-sm">Petrol</p></div></label>
+                            <label class="fuel-radio-card group"><input type="radio" name="fuel" value="diesel" class="hidden peer"><div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer transition-all duration-300 hover:border-amber-300 hover:bg-amber-50/50 peer-checked:border-amber-500 peer-checked:bg-amber-50 peer-checked:shadow-lg peer-checked:shadow-amber-100"><i class="fas fa-oil-can text-2xl mb-2 text-gray-400 group-[&:has(:checked)]:text-amber-600 transition-colors"></i><p class="font-bold text-gray-700 text-sm">Diesel</p></div></label>
+                            <label class="fuel-radio-card group"><input type="radio" name="fuel" value="electric" class="hidden peer"><div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer transition-all duration-300 hover:border-green-300 hover:bg-green-50/50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:shadow-lg peer-checked:shadow-green-100"><i class="fas fa-bolt text-2xl mb-2 text-gray-400 group-[&:has(:checked)]:text-green-600 transition-colors"></i><p class="font-bold text-gray-700 text-sm">Electric</p></div></label>
+                        </div>
+                        <div id="fuelError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please select a fuel type</div>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="citySelect" class="block font-bold text-gray-700 text-lg"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>City (RTO)</label>
+                        <p class="text-sm text-gray-400 mb-2">Search and select your vehicle registration city</p>
+                        <select id="citySelect" name="city" placeholder="Search your city..."><option value="">Select city</option></select>
+                        <div id="cityError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please select a city</div>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="block font-bold text-gray-700 text-lg"><i class="fas fa-file-invoice text-blue-500 mr-2"></i>Previous Claim</label>
+                        <p class="text-sm text-gray-400">Have you made any insurance claim in the last year?</p>
+                        <div class="flex gap-4">
+                            <label class="flex-1 group"><input type="radio" name="claim" value="yes" class="hidden peer"><div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer transition-all duration-300 hover:border-orange-300 hover:bg-orange-50/50 peer-checked:border-orange-500 peer-checked:bg-orange-50 peer-checked:shadow-lg peer-checked:shadow-orange-100"><i class="fas fa-check-circle text-xl mb-1 text-gray-400 group-[&:has(:checked)]:text-orange-600 transition-colors"></i><p class="font-bold text-gray-700">Yes</p></div></label>
+                            <label class="flex-1 group"><input type="radio" name="claim" value="no" class="hidden peer"><div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer transition-all duration-300 hover:border-emerald-300 hover:bg-emerald-50/50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:shadow-lg peer-checked:shadow-emerald-100"><i class="fas fa-times-circle text-xl mb-1 text-gray-400 group-[&:has(:checked)]:text-emerald-600 transition-colors"></i><p class="font-bold text-gray-700">No</p></div></label>
+                        </div>
+                        <div id="claimError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Please indicate previous claim</div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" id="btnStep2Back" class="flex-1 py-3 bg-gray-100 text-gray-700 font-semibold text-base rounded-xl hover:bg-gray-200 active:scale-95 transition-all uppercase tracking-wider"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                    <button type="button" id="btnStep2Submit" class="flex-[2] py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-lg" disabled>Get Quote <i class="fas fa-paper-plane ml-2"></i></button>
+                </div>
+            </div>
+
+            <!-- ═══ STEP 3: Plan Selection ═══ -->
+            <div id="step3Panel" class="stepper-panel hidden">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-4 mb-6 flex items-center justify-between text-white">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center"><i class="fas fa-shield-alt text-emerald-400"></i></div><div><p class="text-slate-400 text-xs uppercase tracking-wider">Base Premium</p><p id="step3BasePremium" class="text-lg font-extrabold">₹0</p></div></div>
+                    <div class="text-right"><p class="text-slate-400 text-xs uppercase tracking-wider">IDV</p><p id="step3IDV" class="text-sm font-bold text-emerald-400">₹0</p></div>
+                </div>
+                <div class="text-center mb-6"><h3 class="text-xl font-extrabold text-gray-900">Choose Your Plan</h3><p class="text-sm text-gray-500 mt-1">Select the coverage that best suits your needs</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="planCardsContainer"></div>
+                <div id="planError" class="validation-error hidden mt-4"><i class="fas fa-exclamation-circle"></i> Please select a plan</div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" id="btnStep3Back" class="flex-1 py-3 bg-gray-100 text-gray-700 font-semibold text-base rounded-xl hover:bg-gray-200 active:scale-95 transition-all uppercase tracking-wider"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                    <button type="button" id="btnStep3Next" class="flex-[2] py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-lg" disabled>Next: Add-ons <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+
+            <!-- ═══ STEP 4: Add-ons ═══ -->
+            <div id="step4Panel" class="stepper-panel hidden">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-4 mb-6 flex items-center justify-between text-white">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center"><i class="fas fa-layer-group text-violet-400"></i></div><div><p class="text-slate-400 text-xs uppercase tracking-wider">Selected Plan</p><p id="step4PlanName" class="text-base font-extrabold">—</p></div></div>
+                    <div class="text-right"><p class="text-slate-400 text-xs uppercase tracking-wider">Plan Price</p><p id="step4PlanPrice" class="text-sm font-bold text-violet-400">₹0</p></div>
+                </div>
+                <div class="text-center mb-5"><h3 class="text-xl font-extrabold text-gray-900">Enhance Your Coverage</h3><p class="text-sm text-gray-500 mt-1">Optional add-ons to supercharge your protection</p></div>
+                <div class="space-y-3" id="addonCardsContainer"></div>
+                <div class="mt-6 bg-gray-50 rounded-2xl p-5 border border-gray-100">
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Plan Premium</span><span class="font-bold text-gray-900" id="summaryPlanPrice">₹0</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Add-ons</span><span class="font-bold text-violet-600" id="summaryAddonCost">+ ₹0</span></div>
+                        <div class="flex justify-between pt-3 mt-2 border-t-2 border-gray-200"><span class="font-extrabold text-gray-900 text-base">Final Premium</span><span class="font-extrabold text-blue-700 text-lg" id="summaryFinalPremium">₹0</span></div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" id="btnStep4Back" class="flex-1 py-3 bg-gray-100 text-gray-700 font-semibold text-base rounded-xl hover:bg-gray-200 active:scale-95 transition-all uppercase tracking-wider"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                    <button type="button" id="btnStep4Next" class="flex-[2] py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-wider">Next: Your Details <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+
+            <!-- ═══ STEP 5: Customer Details ═══ -->
+            <div id="step5Panel" class="stepper-panel hidden">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-4 mb-6 flex items-center justify-between text-white">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center"><i class="fas fa-rupee-sign text-emerald-400"></i></div><div><p class="text-slate-400 text-xs uppercase tracking-wider">Final Premium</p><p id="step5FinalPremium" class="text-lg font-extrabold">₹0</p></div></div>
+                    <div class="text-right"><p class="text-slate-400 text-xs uppercase tracking-wider">Plan</p><p id="step5PlanLabel" class="text-sm font-bold text-emerald-400">—</p></div>
+                </div>
+                <div class="text-center mb-6"><h3 class="text-xl font-extrabold text-gray-900"><i class="fas fa-user-circle text-blue-500 mr-2"></i>Enter Your Details</h3><p class="text-sm text-gray-500 mt-1">We need a few details to finalize your policy</p></div>
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-user text-blue-400 mr-1.5"></i>Full Name <span class="text-red-500">*</span></label><input type="text" id="custName" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="e.g. Rahul Sharma"><div id="custNameError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Full name is required</div></div>
+                        <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-envelope text-blue-400 mr-1.5"></i>Email <span class="text-red-500">*</span></label><input type="email" id="custEmail" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="e.g. rahul@email.com"><div id="custEmailError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Valid email is required</div></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-phone text-blue-400 mr-1.5"></i>Mobile <span class="text-red-500">*</span></label><input type="tel" id="custMobile" maxlength="10" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="e.g. 9876543210"><div id="custMobileError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Valid 10-digit mobile required</div></div>
+                        <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-map-pin text-blue-400 mr-1.5"></i>Pincode <span class="text-red-500">*</span></label><input type="text" id="custPincode" maxlength="6" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="e.g. 400001"><div id="custPincodeError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Valid 6-digit pincode required</div></div>
+                    </div>
+                    <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-home text-blue-400 mr-1.5"></i>Address Line 1 <span class="text-red-500">*</span></label><input type="text" id="custAddress1" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="House/Flat No., Building, Street"><div id="custAddress1Error" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> Address is required</div></div>
+                    <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-building text-blue-400 mr-1.5"></i>Address Line 2 <span class="text-gray-400 font-normal">(Optional)</span></label><input type="text" id="custAddress2" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="Landmark, Area"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-city text-blue-400 mr-1.5"></i>City <span class="text-red-500">*</span></label><input type="text" id="custCity" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm" placeholder="e.g. Mumbai"><div id="custCityError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> City is required</div></div>
+                        <div class="space-y-1.5"><label class="block text-sm font-bold text-gray-700"><i class="fas fa-flag text-blue-400 mr-1.5"></i>State <span class="text-red-500">*</span></label><select id="custState" class="cust-input w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm"><option value="">Select State</option><option value="Andhra Pradesh">Andhra Pradesh</option><option value="Arunachal Pradesh">Arunachal Pradesh</option><option value="Assam">Assam</option><option value="Bihar">Bihar</option><option value="Chhattisgarh">Chhattisgarh</option><option value="Goa">Goa</option><option value="Gujarat">Gujarat</option><option value="Haryana">Haryana</option><option value="Himachal Pradesh">Himachal Pradesh</option><option value="Jharkhand">Jharkhand</option><option value="Karnataka">Karnataka</option><option value="Kerala">Kerala</option><option value="Madhya Pradesh">Madhya Pradesh</option><option value="Maharashtra">Maharashtra</option><option value="Manipur">Manipur</option><option value="Meghalaya">Meghalaya</option><option value="Mizoram">Mizoram</option><option value="Nagaland">Nagaland</option><option value="Odisha">Odisha</option><option value="Punjab">Punjab</option><option value="Rajasthan">Rajasthan</option><option value="Sikkim">Sikkim</option><option value="Tamil Nadu">Tamil Nadu</option><option value="Telangana">Telangana</option><option value="Tripura">Tripura</option><option value="Uttar Pradesh">Uttar Pradesh</option><option value="Uttarakhand">Uttarakhand</option><option value="West Bengal">West Bengal</option><option value="Delhi">Delhi</option><option value="Chandigarh">Chandigarh</option></select><div id="custStateError" class="validation-error hidden"><i class="fas fa-exclamation-circle"></i> State is required</div></div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-8">
+                    <button type="button" id="btnStep5Back" class="flex-1 py-3 bg-gray-100 text-gray-700 font-semibold text-base rounded-xl hover:bg-gray-200 active:scale-95 transition-all uppercase tracking-wider"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                    <button type="button" id="btnStep5Submit" class="flex-[2] py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-lg" disabled>Proceed to Payment <i class="fas fa-lock ml-2"></i></button>
+                </div>
+            </div>
+
+            <!-- ═══ STEP 6: Payment ═══ -->
+            <div id="step6Panel" class="stepper-panel hidden">
+                <!-- Order Summary Card -->
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 mb-6 text-white">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center"><i class="fas fa-receipt text-emerald-400 text-lg"></i></div>
+                        <h3 class="text-lg font-extrabold">Order Summary</h3>
+                    </div>
+                    <div class="space-y-3 text-sm" id="paymentSummaryDetails">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-white/10 flex justify-between items-center">
+                        <span class="text-slate-300 font-bold uppercase tracking-wider text-sm">Amount Payable</span>
+                        <span id="paymentTotalAmount" class="text-3xl font-extrabold text-emerald-400">₹0</span>
+                    </div>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <div class="text-center mb-5">
+                    <h3 class="text-lg font-extrabold text-gray-900"><i class="fas fa-credit-card text-blue-500 mr-2"></i>Choose Payment Method</h3>
+                </div>
+
+                <!-- Razorpay Button -->
+                <button type="button" id="btnPayRazorpay" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold text-base rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all mb-3 flex items-center justify-center gap-3">
+                    <i class="fas fa-credit-card text-xl"></i>
+                    <div class="text-left">
+                        <span class="block text-base">Pay with Razorpay</span>
+                        <span class="block text-xs text-blue-200 font-normal">UPI · Cards · NetBanking · Wallets</span>
+                    </div>
+                </button>
+
+
+
+
+                <!-- Payment Error Message -->
+                <div id="paymentError" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-3">
+                    <i class="fas fa-exclamation-triangle text-red-500"></i>
+                    <span id="paymentErrorMsg">Payment failed. Please try again.</span>
+                </div>
+
+                <!-- Back Button -->
+                <button type="button" id="btnStep6Back" class="w-full mt-5 py-3 bg-gray-100 text-gray-700 font-semibold text-base rounded-xl hover:bg-gray-200 active:scale-95 transition-all uppercase tracking-wider">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Details
+                </button>
+            </div>
+        </form>
+
+        <!-- Success Confirmation -->
+        <div id="successOverlay" class="hidden">
+            <div class="animate-fade-in text-center py-8">
+                <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-5"><i class="fas fa-check text-4xl text-emerald-600"></i></div>
+                <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Payment Successful!</h3>
+                <p class="text-gray-500 mb-4 max-w-sm mx-auto">Your insurance policy is now active. A confirmation has been sent to your email.</p>
+                <div class="bg-gray-50 rounded-2xl p-5 mb-6 border border-gray-100 text-left max-w-md mx-auto">
+                    <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2 text-sm uppercase tracking-wider"><i class="fas fa-receipt text-blue-500"></i> Policy Receipt</h4>
+                    <div class="space-y-2 text-sm" id="orderSummary"></div>
+                </div>
+                <a href="/" class="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"><i class="fas fa-home mr-2"></i> Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="infoBox" class="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">
+        <i class="fas fa-info-circle text-blue-600 text-xl mt-1"></i>
+        <p class="text-blue-800 text-sm leading-relaxed">Selection of correct brand and variant is crucial for an accurate premium calculation. Ensure the details match your vehicle registration documents.</p>
+    </div>
+</div>
+
+<div id="toastContainer" class="fixed top-6 right-6 z-50 flex flex-col gap-3"></div>
+<script src="/js/stepperState.js"></script>
+<script src="/js/vehicleSwitchHandler.js"></script>
+<script src="/js/stepperForm.js"></script>
+<%- include('partials/footer') %>

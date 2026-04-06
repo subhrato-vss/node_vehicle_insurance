@@ -1,0 +1,175 @@
+<%- include('partials/header') %>
+
+<div class="flex min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <%- include('partials/user-sidebar', { activeTab: 'dashboard' }) %>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+            
+            <!-- Mobile Header / Welcome -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">Welcome back, <%= user.name %>!</h1>
+                    <p class="text-sm text-gray-500 mt-1">Here's an overview of your protected vehicles.</p>
+                </div>
+                <!-- Mobile Logout (Only visible on small) -->
+                <form action="/api/user/logout" method="POST" class="md:hidden">
+                    <button type="submit" class="p-2 text-red-600 bg-red-50 rounded-lg">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                <!-- Total Policies -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Total Policies</p>
+                        <p class="text-2xl font-extrabold text-gray-900" id="statTotal">-</p>
+                    </div>
+                </div>
+                <!-- Active Policies -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Active Policies</p>
+                        <p class="text-2xl font-extrabold text-gray-900" id="statActive">-</p>
+                    </div>
+                </div>
+                <!-- Premium Paid -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Premium Paid</p>
+                        <p class="text-2xl font-extrabold text-gray-900" id="statPremium">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Policies Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                    <h3 class="text-lg font-bold text-gray-900">My Policies</h3>
+                    <a href="/vehicle-form?type=car" class="text-sm font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-4 py-2 rounded-lg transition-colors">
+                        + New Policy
+                    </a>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm whitespace-nowrap">
+                        <thead class="uppercase tracking-wider border-b border-gray-200 bg-white text-gray-400 font-bold text-xs">
+                            <tr>
+                                <th class="px-6 py-4">Policy No.</th>
+                                <th class="px-6 py-4">Vehicle</th>
+                                <th class="px-6 py-4">Plan</th>
+                                <th class="px-6 py-4">Premium</th>
+                                <th class="px-6 py-4">Expiry Date</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="policiesTableBody" class="divide-y divide-gray-100 font-medium text-gray-700">
+                            <tr>
+                                <td colspan="7" class="px-6 py-8 text-center text-gray-400">
+                                    <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                                    <p>Loading policies...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const tbody = document.getElementById('policiesTableBody');
+        const formatCurrency = (amount) => '₹' + Number(amount).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+
+        try {
+            const res = await fetch('/api/user/policies');
+            if (res.status === 401) {
+                window.location.href = '/user/login';
+                return;
+            }
+            const policies = await res.json();
+
+            let totalPremium = 0;
+            
+            if (policies.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center">
+                            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400 text-2xl">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <p class="text-base font-bold text-gray-900 mb-1">No policies found</p>
+                            <p class="text-gray-500 mb-4 text-sm font-normal">You don't have any active insurance policies yet.</p>
+                            <a href="/vehicle-form?type=car" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm font-bold text-white bg-blue-600 hover:bg-blue-700 text-sm">Get Insurance</a>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = policies.map(p => {
+                    totalPremium += parseFloat(p.premium) || 0;
+                    return `
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <span class="font-bold text-blue-600 cursor-pointer" onclick="window.location.href='/user/policy/${p.policy_number}'">${p.policy_number}</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-900">${p.vehicle}</td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+                                  ${p.plan}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">${formatCurrency(p.premium)}</td>
+                            <td class="px-6 py-4 text-gray-600 font-bold">
+                                ${new Date(p.end_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            </td>
+                            <td class="px-6 py-4">
+                                ${p.status === 'active' ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800">
+                                  <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span> Active
+                                </span>` : ''}
+                                ${p.status === 'expiring' ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">
+                                  <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 mr-1.5 animate-pulse"></span> Expiring
+                                </span>` : ''}
+                                ${p.status === 'expired' ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800">
+                                  <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span> Expired
+                                </span>` : ''}
+                            </td>
+                            <td class="px-6 py-4 text-right flex justify-end items-center">
+                                ${(p.status === 'expiring' || p.status === 'expired') ? `<a href="/renew-policy/${p.id}" class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent rounded-lg shadow-sm font-bold text-white bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 text-xs mr-3"><i class="fas fa-sync-alt mr-1.5"></i> Renew Now</a>` : ''}
+                                ${p.status === 'active' || p.status === 'expiring' ? `<a href="/user/claim/new/${p.id}" class="text-amber-600 hover:text-amber-800 font-bold mr-4"><i class="fas fa-hand-holding-medical"></i> Claim</a>` : ''}
+                                <a href="/user/policy/${p.policy_number}" class="text-blue-600 hover:text-blue-800 font-bold mr-4">View</a>
+                                <a href="${p.pdf}" target="_blank" download class="text-gray-500 hover:text-gray-700"><i class="fas fa-download"></i></a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('statTotal').textContent = policies.length;
+            document.getElementById('statActive').textContent = policies.filter(p => p.status === 'active' || p.status === 'expiring').length;
+            document.getElementById('statPremium').textContent = formatCurrency(totalPremium);
+
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-red-500"><i class="fas fa-exclamation-triangle mr-2"></i> Error loading policies</td></tr>`;
+        }
+    });
+</script>
+
+<%- include('partials/footer') %>

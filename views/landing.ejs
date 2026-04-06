@@ -1,0 +1,297 @@
+<%- include('partials/header') %>
+
+<!-- Custom Style for Step Lines -->
+<style>
+    .step-line::after {
+        content: '';
+        position: absolute;
+        top: 2rem;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background: repeating-linear-gradient(to right, #cbd5e1 0, #cbd5e1 8px, transparent 8px, transparent 16px);
+        z-index: 0;
+    }
+    @media (max-width: 1024px) {
+        .step-line::after { display: none; }
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="relative bg-white pt-16 pb-32 overflow-hidden">
+    <!-- Background Decor -->
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-50"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+                    <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+                    Trusted by 10,000+ Vehicle Owners
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6">
+                    Buy Car & Bike <br/>
+                    <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Insurance in Minutes</span>
+                </h1>
+                <p class="text-xl text-slate-600 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
+                    Compare plans, calculate premiums, and get your instant policy – all in one place. No paperwork, no hidden costs.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="#quick-start" class="px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3 w-full sm:w-auto justify-center">
+                        Get Started <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                    <a href="#plans" class="px-8 py-4 bg-white border-2 border-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-slate-50 transition-all w-full sm:w-auto text-center">
+                        View Plans
+                    </a>
+                </div>
+                
+                <div class="mt-12 flex items-center justify-center lg:justify-start gap-8 opacity-70 grayscale">
+                    <div class="flex items-center gap-2"><i class="fas fa-shield-alt text-xl"></i> <span class="font-bold text-sm tracking-tight">ISO Certified</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-lock text-xl"></i> <span class="font-bold text-sm tracking-tight">100% Secure</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-headset text-xl"></i> <span class="font-bold text-sm tracking-tight">24/7 Support</span></div>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2 relative">
+                <div class="relative z-10 p-4">
+                    <img src="/images/hero_image.png" alt="DriveGuard Insurance - Car & Bike" class="w-full h-auto drop-shadow-2xl animate-float">
+                </div>
+                <!-- Floating stat card -->
+                <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-2xl border border-blue-50 z-20 hidden sm:block">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Processing Speed</p>
+                            <p class="text-lg font-black text-slate-900">3 Minutes or less</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Start (Vehicle Selection) -->
+<section id="quick-start" class="py-24 bg-slate-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto bg-white rounded-[3rem] shadow-2xl border border-white p-8 md:p-16 relative overflow-hidden -mt-32 z-30">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-black text-slate-900 mb-4">Select Your Vehicle Type</h2>
+                <p class="text-slate-500">Pick as per your requirement to start the instant calculation.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Car Card -->
+                <a href="/vehicle-form?type=car" class="group relative p-8 bg-blue-50/50 rounded-[2.5rem] border-2 border-transparent hover:border-blue-600 hover:bg-blue-50 transition-all duration-500 overflow-hidden text-center">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-600 opacity-5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+                    <div class="relative z-10">
+                        <div class="w-24 h-24 bg-white text-blue-600 rounded-3xl shadow-xl flex items-center justify-center text-5xl mx-auto mb-6 group-hover:-translate-y-2 transition-transform duration-500">
+                            <i class="fas fa-car-side"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-2">Car Insurance</h3>
+                        <p class="text-slate-500 text-sm mb-6 px-4">Comprehensive covers for your private cars with zero-dep and engine protection.</p>
+                        <span class="inline-flex px-6 py-2 bg-blue-600 text-white font-bold rounded-xl group-hover:px-10 transition-all">Select Car <i class="fas fa-chevron-right ml-2"></i></span>
+                    </div>
+                </a>
+
+                <!-- Bike Card -->
+                <a href="/vehicle-form?type=bike" class="group relative p-8 bg-indigo-50/50 rounded-[2.5rem] border-2 border-transparent hover:border-indigo-600 hover:bg-indigo-50 transition-all duration-500 overflow-hidden text-center">
+                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-600 opacity-5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+                    <div class="relative z-10">
+                        <div class="w-24 h-24 bg-white text-indigo-600 rounded-3xl shadow-xl flex items-center justify-center text-5xl mx-auto mb-6 group-hover:-translate-y-2 transition-transform duration-500">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-2">Bike Insurance</h3>
+                        <p class="text-slate-500 text-sm mb-6 px-4">Instant third-party and own-damage covers for all two-wheelers and scooters.</p>
+                        <span class="inline-flex px-6 py-2 bg-indigo-600 text-white font-bold rounded-xl group-hover:px-10 transition-all">Select Bike <i class="fas fa-chevron-right ml-2"></i></span>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="mt-12 flex justify-center items-center gap-4 py-4 px-6 bg-slate-50 rounded-2xl">
+                <i class="fas fa-info-circle text-blue-600"></i>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Takes less than 2 minutes to get a quote</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-20">
+            <h2 class="text-4xl font-black text-slate-900 mb-4">How It Works</h2>
+            <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
+            <!-- Step 1 -->
+            <div class="relative text-center group step-line">
+                <div class="w-20 h-20 bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-[2rem] flex items-center justify-center text-3xl font-black mx-auto mb-6 relative z-10 bg-white group-hover:border-blue-600 group-hover:text-blue-600 transition-all">1</div>
+                <h4 class="text-xl font-bold text-slate-900 mb-2">Enter Details</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Provide your vehicle model, fuel type, and registration city.</p>
+            </div>
+            <!-- Step 2 -->
+            <div class="relative text-center group step-line">
+                <div class="w-20 h-20 bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-[2rem] flex items-center justify-center text-3xl font-black mx-auto mb-6 relative z-10 bg-white group-hover:border-blue-600 group-hover:text-blue-600 transition-all">2</div>
+                <h4 class="text-xl font-bold text-slate-900 mb-2">Calculate</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">System calculates live premium based on IDV and risk profile.</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="relative text-center group step-line">
+                <div class="w-20 h-20 bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-[2rem] flex items-center justify-center text-3xl font-black mx-auto mb-6 relative z-10 bg-white group-hover:border-blue-600 group-hover:text-blue-600 transition-all">3</div>
+                <h4 class="text-xl font-bold text-slate-900 mb-2">Choose Plan</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Pick a plan (Basic/Std/Premium) and add your favorite add-ons.</p>
+            </div>
+            <!-- Step 4 -->
+            <div class="relative text-center group">
+                <div class="w-20 h-20 bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-[2rem] flex items-center justify-center text-3xl font-black mx-auto mb-6 relative z-10 bg-white group-hover:border-emerald-500 group-hover:text-emerald-500 transition-all">4</div>
+                <h4 class="text-xl font-bold text-slate-900 mb-2">Instant Policy</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Make payment securely and download your policy on the spot.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Promo Banner Section -->
+<section class="relative py-32 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="/images/promo_banner.png" alt="Promo Banner" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/50 to-transparent"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10 text-center lg:text-left">
+        <div class="max-w-2xl">
+            <h2 class="text-4xl lg:text-6xl font-black text-white leading-tight mb-6 mt-12 lg:mt-0">
+                Protect What Matters.<br/>
+                <span class="text-blue-400">Insure Your Journey.</span>
+            </h2>
+            <p class="text-xl text-slate-300 mb-10 leading-relaxed">
+                Experience peace of mind with our 24/7 claim assistance and instant digital policy generation. Join 10,000+ vehicle owners today.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <a href="#quick-start" class="px-10 py-5 bg-blue-600 text-white font-black rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-3">
+                    Get Instant Quote <i class="fas fa-bolt"></i>
+                </a>
+                <div class="flex items-center gap-4 px-6 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                    <div class="flex -space-x-3">
+                        <img class="w-10 h-10 rounded-full border-2 border-slate-900" src="https://i.pravatar.cc/100?u=1" alt="User">
+                        <img class="w-10 h-10 rounded-full border-2 border-slate-900" src="https://i.pravatar.cc/100?u=2" alt="User">
+                        <img class="w-10 h-10 rounded-full border-2 border-slate-900" src="https://i.pravatar.cc/100?u=3" alt="User">
+                    </div>
+                    <span class="text-sm font-bold text-white tracking-tight">4.9/5 Rating</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Plans Preview -->
+<section id="plans" class="py-24 bg-slate-900 text-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-20">
+            <h2 class="text-4xl font-black mb-4">Flexible Insurance Plans</h2>
+            <p class="text-slate-400">Choose the best protection for your journey</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Basic Plan -->
+            <div class="p-10 bg-slate-800 rounded-[3rem] border border-slate-700 hover:border-blue-500/50 transition-all">
+                <h4 class="text-xl font-black mb-2">Basic</h4>
+                <p class="text-slate-400 text-sm mb-8">Essential Third-Party cover only.</p>
+                <div class="text-4xl font-black mb-8 text-blue-400">₹ Low</div>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-3 text-sm text-slate-300"><i class="fas fa-check-circle text-blue-500"></i> Third Party Liability</li>
+                    <li class="flex items-center gap-3 text-sm text-slate-500 line-through"><i class="fas fa-times-circle"></i> Own Damage Cover</li>
+                    <li class="flex items-center gap-3 text-sm text-slate-500 line-through"><i class="fas fa-times-circle"></i> Premium Add-ons</li>
+                </ul>
+            </div>
+            <!-- Standard Plan -->
+            <div class="p-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] shadow-2xl scale-105 relative z-10">
+                <div class="absolute top-6 right-6 bg-white/20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Most Popular</div>
+                <h4 class="text-xl font-black mb-2">Standard</h4>
+                <p class="text-white/70 text-sm mb-8">Best balance of cover and cost.</p>
+                <div class="text-4xl font-black mb-8">₹ Moderate</div>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-3 text-sm"><i class="fas fa-check-circle"></i> Third Party Liability</li>
+                    <li class="flex items-center gap-3 text-sm"><i class="fas fa-check-circle"></i> Basic Own Damage</li>
+                    <li class="flex items-center gap-3 text-sm opacity-50"><i class="fas fa-times-circle"></i> No Zero Dep</li>
+                </ul>
+            </div>
+            <!-- Premium Plan -->
+            <div class="p-10 bg-slate-800 rounded-[3rem] border border-slate-700 hover:border-indigo-500/50 transition-all">
+                <h4 class="text-xl font-black mb-2">Premium</h4>
+                <p class="text-slate-400 text-sm mb-8">Maximum protection with all bells.</p>
+                <div class="text-4xl font-black mb-8 text-indigo-400">₹ High</div>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-3 text-sm text-slate-300"><i class="fas fa-check-circle text-indigo-500"></i> Full Own Damage</li>
+                    <li class="flex items-center gap-3 text-sm text-slate-300"><i class="fas fa-check-circle text-indigo-500"></i> All Premium Add-ons</li>
+                    <li class="flex items-center gap-3 text-sm text-slate-300"><i class="fas fa-check-circle text-indigo-500"></i> 24/7 Roadside Assist</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col lg:flex-row items-center gap-20">
+            <div class="lg:w-1/3">
+                <h2 class="text-4xl font-black text-slate-900 mb-6">Why Choose DriveGuard?</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">We leverage technology to simplify insurance. No more calls with agents or physical document submissions.</p>
+                <a href="#quick-start" class="inline-flex items-center gap-2 text-blue-600 font-bold hover:gap-4 transition-all">Explore all features <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-8 bg-slate-50 rounded-3xl group hover:bg-white hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-white text-blue-600 rounded-2xl shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white-600 transition-all">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <h5 class="text-lg font-bold text-slate-900 mb-2">Instant Policy</h5>
+                    <p class="text-slate-500 text-sm">Download your policy PDF immediately after the payment verification.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-8 bg-slate-50 rounded-3xl group hover:bg-white hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-white text-emerald-600 rounded-2xl shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h5 class="text-lg font-bold text-slate-900 mb-2">Secure Payments</h5>
+                    <p class="text-slate-500 text-sm">Processed by Razorpay with 256-bit encryption for maximum safety.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-8 bg-slate-50 rounded-3xl group hover:bg-white hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-white text-indigo-600 rounded-2xl shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h5 class="text-lg font-bold text-slate-900 mb-2">Easy Renewal</h5>
+                    <p class="text-slate-500 text-sm">Renew your policy in just 2 clicks via your dedicated customer dashboard.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="p-8 bg-slate-50 rounded-3xl group hover:bg-white hover:shadow-xl transition-all">
+                    <div class="w-14 h-14 bg-white text-blue-400 rounded-2xl shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-400 group-hover:text-white transition-all">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h5 class="text-lg font-bold text-slate-900 mb-2">User Dashboard</h5>
+                    <p class="text-slate-500 text-sm">Manage all your active and expired policies in one single console.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-24 bg-blue-600">
+    <div class="container mx-auto px-4 text-center text-white">
+        <h2 class="text-4xl font-black mb-4">Ready to Protect Your Ride?</h2>
+        <p class="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">Join 10,000+ happy customers who saved up to 20% on their premiums this year.</p>
+        <a href="#quick-start" class="px-12 py-5 bg-white text-blue-600 font-black rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all inline-block">
+            Get Your Quote Now
+        </a>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

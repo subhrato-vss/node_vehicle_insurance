@@ -1,0 +1,227 @@
+<%- include('../partials/admin-header') %>
+
+<div class="flex flex-col md:flex-row gap-8 py-6">
+    <!-- Sidebar -->
+    <%- include('../partials/admin-sidebar', { activeTab: 'dashboard' }) %>
+
+    <!-- Main Content -->
+    <main class="flex-grow space-y-8">
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 lg:p-10 text-white shadow-2xl relative overflow-hidden flex items-center justify-between">
+            <div class="relative z-10">
+                <h1 class="text-3xl lg:text-4xl font-extrabold mb-3">Welcome back, Admin!</h1>
+                <p class="text-blue-100 text-lg max-w-xl">Your central command center for all vehicle data. Oversee brands, models, and precise variant specifications dynamically.</p>
+            </div>
+            <i class="fas fa-shield-alt absolute -bottom-10 -right-10 text-[200px] text-white/10 rotate-12"></i>
+        </div>
+
+        <!-- Metric Widgets -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Brands Stat -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Total Brands</p>
+                        <h2 class="text-5xl font-extrabold text-blue-600"><%= stats.brands %></h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-tags text-xl"></i>
+                    </div>
+                </div>
+                <i class="fas fa-tags absolute -bottom-4 -right-4 text-8xl text-blue-50 opacity-0 group-hover:opacity-50 transition-opacity duration-300 rotate-12"></i>
+            </div>
+
+            <!-- Models Stat -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Total Models</p>
+                        <h2 class="text-5xl font-extrabold text-indigo-600"><%= stats.models %></h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                        <i class="fas fa-car-side text-xl"></i>
+                    </div>
+                </div>
+                <i class="fas fa-car-side absolute -bottom-4 -right-4 text-8xl text-indigo-50 opacity-0 group-hover:opacity-50 transition-opacity duration-300 -rotate-12"></i>
+            </div>
+
+            <!-- Variants Stat -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Total Variants</p>
+                        <h2 class="text-5xl font-extrabold text-purple-600"><%= stats.variants %></h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600">
+                        <i class="fas fa-cogs text-xl"></i>
+                    </div>
+                </div>
+                <i class="fas fa-cogs absolute -bottom-4 -right-4 text-8xl text-purple-50 opacity-0 group-hover:opacity-50 transition-opacity duration-300 rotate-12"></i>
+            </div>
+        </div>
+
+        <!-- Metric Widgets (Row 2: Policies) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Total Policies -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Total Policies</p>
+                        <h2 class="text-5xl font-extrabold text-blue-600"><%= stats.policies %></h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-file-invoice text-xl"></i>
+                    </div>
+                </div>
+                <i class="fas fa-file-invoice absolute -bottom-4 -right-4 text-8xl text-blue-50 opacity-0 group-hover:opacity-50 transition-opacity duration-300 rotate-12"></i>
+            </div>
+
+            <!-- Active Policies -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Active Now</p>
+                        <h2 class="text-5xl font-extrabold text-emerald-600"><%= stats.activePolicies %></h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                        <i class="fas fa-check-double text-xl"></i>
+                    </div>
+                </div>
+                <i class="fas fa-check-double absolute -bottom-4 -right-4 text-8xl text-emerald-50 opacity-0 group-hover:opacity-50 transition-opacity duration-300 -rotate-12"></i>
+            </div>
+
+            <!-- Total Revenue -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Total Revenue</p>
+                        <h2 class="text-3xl font-extrabold text-amber-600">₹<%= Number(stats.revenue).toLocaleString('en-IN') %></h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600">
+                        <i class="fas fa-chart-pie text-xl"></i>
+                    </div>
+                </div>
+                <i class="fas fa-chart-pie absolute -bottom-4 -right-4 text-8xl text-amber-50 opacity-0 group-hover:opacity-50 transition-opacity duration-300 rotate-12"></i>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Recent Activity Table -->
+            <div class="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="px-8 py-6 border-b flex justify-between items-center bg-gray-50/50">
+                    <h3 class="text-lg font-extrabold text-gray-900 flex items-center gap-2">
+                        <i class="fas fa-history text-blue-600"></i> Recent Additions
+                    </h3>
+                    <a href="/admin/variants" class="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">View All &rarr;</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white text-gray-400 text-xs font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Vehicle</th>
+                                <th class="px-6 py-4">Variant Name</th>
+                                <th class="px-6 py-4">Type</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <% if (recentVariants && recentVariants.length > 0) { %>
+                                <% recentVariants.forEach(variant => { %>
+                                    <tr class="hover:bg-blue-50/30 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex flex-col">
+                                                <span class="text-xs text-gray-400 uppercase tracking-tighter"><%= variant.brand_name %></span>
+                                                <span class="font-bold text-gray-800"><%= variant.model_name %></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 font-bold text-purple-600"><%= variant.name %></td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase <%= variant.brand_type === 'car' ? 'bg-blue-100 text-blue-700' : 'bg-indigo-100 text-indigo-700' %>">
+                                                <%= variant.brand_type %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="3" class="px-6 py-8 text-center text-gray-500 italic">No variants recorded yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Policies Table -->
+            <div class="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="px-8 py-6 border-b flex justify-between items-center bg-gray-50/50">
+                    <h3 class="text-lg font-extrabold text-gray-900 flex items-center gap-2">
+                        <i class="fas fa-file-signature text-emerald-600"></i> Recent Policy Issuance
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white text-gray-400 text-xs font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Policy No.</th>
+                                <th class="px-6 py-4">Customer</th>
+                                <th class="px-6 py-4">Vehicle</th>
+                                <th class="px-6 py-4">Premium</th>
+                                <th class="px-6 py-4">Expiry</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <% if (recentPolicies && recentPolicies.length > 0) { %>
+                                <% recentPolicies.forEach(p => { %>
+                                    <tr class="hover:bg-emerald-50/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-blue-600"><%= p.policy_number %></td>
+                                        <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= p.customer_name %></td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex flex-col">
+                                                <span class="text-xs text-gray-400 capitalize"><%= p.brand_name %></span>
+                                                <span class="text-sm font-bold text-gray-700"><%= p.variant_name %></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 font-bold text-gray-900">₹<%= Number(p.final_premium).toLocaleString('en-IN') %></td>
+                                        <td class="px-6 py-4 text-xs font-bold text-gray-500">
+                                            <%= new Date(p.end_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase <%= p.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' %>">
+                                                <%= p.status %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr><td colspan="5" class="px-6 py-8 text-center text-gray-500 italic">No policies issued recently.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 flex flex-col gap-4">
+                <h3 class="text-lg font-extrabold text-gray-900 flex items-center gap-2 mb-2">
+                    <i class="fas fa-bolt text-yellow-500"></i> Quick Actions
+                </h3>
+                
+                <a href="/admin/brands" class="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md hover:-translate-y-0.5 transition-all group bg-gray-50 hover:bg-white text-gray-700 hover:text-blue-600 font-bold">
+                    <span class="flex items-center gap-3"><i class="fas fa-tags text-gray-400 group-hover:text-blue-500"></i> Manage Brands</span>
+                    <i class="fas fa-chevron-right text-sm text-gray-300 group-hover:text-blue-500"></i>
+                </a>
+                
+                <a href="/admin/models" class="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-0.5 transition-all group bg-gray-50 hover:bg-white text-gray-700 hover:text-indigo-600 font-bold">
+                    <span class="flex items-center gap-3"><i class="fas fa-car-side text-gray-400 group-hover:text-indigo-500"></i> Manage Models</span>
+                    <i class="fas fa-chevron-right text-sm text-gray-300 group-hover:text-indigo-500"></i>
+                </a>
+                
+                <a href="/admin/variants" class="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:shadow-md hover:-translate-y-0.5 transition-all group bg-gray-50 hover:bg-white text-gray-700 hover:text-purple-600 font-bold">
+                    <span class="flex items-center gap-3"><i class="fas fa-cogs text-gray-400 group-hover:text-purple-500"></i> Edit Variants</span>
+                    <i class="fas fa-chevron-right text-sm text-gray-300 group-hover:text-purple-500"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+</div>
+
+<%- include('../partials/footer') %>

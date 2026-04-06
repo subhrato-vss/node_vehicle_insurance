@@ -1,0 +1,206 @@
+<%- include('partials/header') %>
+
+<div class="flex min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <%- include('partials/user-sidebar', { activeTab: '' }) %>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+            
+            <div class="mb-6 flex items-center justify-between">
+                <a href="/user/dashboard" class="text-sm font-bold text-gray-500 hover:text-blue-600 transition-colors flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                </a>
+                
+                <a href="/policies/POLICY_<%= policy.policy_number %>.pdf" target="_blank" download class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-colors">
+                    <i class="fas fa-download mr-2"></i> Download PDF
+                </a>
+            </div>
+
+            <!-- Header Card -->
+            <div class="bg-white rounded-t-2xl border border-gray-200 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600 text-2xl border border-emerald-100">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-gray-900"><%= policy.policy_number %></h1>
+                        <p class="text-sm text-gray-500">
+                            Issued: <%= new Date(policy.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %> | 
+                            Expires: <span class="font-bold text-red-600"><%= new Date(policy.end_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-800 border border-green-200">
+                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                        Active Status
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-x border-b border-gray-200 rounded-b-2xl overflow-hidden bg-white">
+                
+                <!-- Customer Details -->
+                <div class="p-6 border-b md:border-b-0 md:border-r border-gray-100">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4"><i class="fas fa-user mr-1"></i> Policy Holder</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Name</p>
+                            <p class="font-bold text-gray-900"><%= policy.customer_name %></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Contact Info</p>
+                            <p class="text-sm font-medium text-gray-700"><%= policy.customer_email %></p>
+                            <p class="text-sm font-medium text-gray-700"><%= policy.customer_mobile %></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Address</p>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">
+                                <%= policy.address_line1 %> <%= policy.address_line2 ? ', ' + policy.address_line2 : '' %><br>
+                                <%= policy.customer_city %>, <%= policy.customer_state %> - <%= policy.customer_pincode %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Details -->
+                <div class="p-6">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4"><i class="fas fa-car mr-1"></i> Insured Vehicle</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Vehicle Type</p>
+                            <p class="font-bold text-gray-900 capitalize"><%= policy.vehicle_type %> - <%= policy.manufacturing_year %></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Fuel & RTO</p>
+                            <p class="text-sm font-medium text-gray-700 capitalize"><%= policy.fuel_type %> • RTO: <%= policy.rto_city %></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Insured Declared Value (IDV)</p>
+                            <p class="text-sm font-bold text-blue-600">₹<%= Number(policy.idv).toLocaleString('en-IN') %></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan & Add-ons -->
+                <div class="p-6 border-t md:border-r border-gray-100 bg-gray-50">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4"><i class="fas fa-layer-group mr-1"></i> Coverage details</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Selected Plan</p>
+                            <div class="mt-1 flex items-center gap-2">
+                                <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg text-sm font-extrabold"><%= policy.plan_name %></span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide">Included Add-ons</p>
+                            <div class="mt-1 flex flex-wrap gap-2">
+                                <% if (addons && addons.length > 0) { %>
+                                    <% const mapAddon = { zero_dep: 'Zero Depreciation', engine_protect: 'Engine Protection', rsa: 'Roadside Assistance', consumables: 'Consumables Cover' }; %>
+                                    <% addons.forEach(a => { %>
+                                        <span class="inline-flex items-center px-2 py-1 rounded text-[11px] font-bold bg-violet-100 text-violet-700"><%= mapAddon[a] || a %></span>
+                                    <% }); %>
+                                <% } else { %>
+                                    <span class="text-sm font-medium text-gray-500">Standard Coverage Only</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Breakdown -->
+                <div class="p-6 border-t border-gray-100 bg-gray-900 text-white flex flex-col justify-center">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4"><i class="fas fa-receipt mr-1"></i> Payment Summary</h3>
+                    
+                    <div class="space-y-2 mb-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Base Premium</span>
+                            <span class="font-medium text-gray-200">₹<%= Number(policy.plan_price).toLocaleString('en-IN') %></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Add-ons Cost</span>
+                            <span class="font-medium text-gray-200">+ ₹<%= Number(policy.addons_cost).toLocaleString('en-IN') %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-white/10 pt-3 flex justify-between items-end">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wide mb-1">Total Paid</p>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-gray-300 font-mono"><%= policy.payment_method %></span>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-extrabold text-emerald-400 tracking-tight">₹<%= Number(policy.final_premium).toLocaleString('en-IN') %></p>
+                    </div>
+                    <p class="text-[9px] text-gray-500 text-right mt-2 font-mono">Ref: <%= policy.payment_id %></p>
+                </div>
+            </div>
+            
+            <!-- Policy History Timeline -->
+            <div class="mt-8 bg-white rounded-2xl border border-gray-200 p-6 hidden shadow-sm w-full" id="policyHistorySection">
+                <h3 class="text-lg font-extrabold text-gray-900 mb-6 flex items-center"><i class="fas fa-history text-blue-500 mr-2"></i> Renewal History</h3>
+                <div class="relative border-l-2 border-gray-200 ml-3" id="timelineContainer">
+                    <!-- Timeline items will be injected here -->
+                </div>
+            </div>
+            
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const policyId = "<%= policy.id %>";
+        const cNo = "<%= policy.policy_number %>";
+        try {
+            const res = await fetch(`/api/policies/history/${policyId}`);
+            const history = await res.json();
+            
+            if (history && history.length > 1) {
+                document.getElementById('policyHistorySection').classList.remove('hidden');
+                const container = document.getElementById('timelineContainer');
+                
+                container.innerHTML = history.map((item, index) => {
+                    const isCurrent = item.policy_number === cNo;
+                    const isFirst = item.renewal_count === 0;
+                    const dateStr = item.start_date ? new Date(item.start_date).toLocaleDateString() + ' - ' + new Date(item.end_date).toLocaleDateString() : 'Active Pending';
+                    const statusColor = item.status === 'active' ? 'bg-green-500' : 'bg-gray-400';
+                    
+                    return `
+                    <div class="mb-8 ml-6 relative">
+                        <div class="absolute -left-[35px] mt-1.5 w-6 h-6 rounded-full ${isCurrent ? 'bg-blue-100 border-2 border-blue-500 text-blue-500' : 'bg-gray-100 border-2 border-gray-300 text-gray-400'} flex items-center justify-center text-[10px]">
+                            <i class="fas ${isFirst ? 'fa-star' : 'fa-sync-alt'}"></i>
+                        </div>
+                        <div class="${isCurrent ? 'bg-blue-50/50 border border-blue-100' : 'bg-gray-50 border border-gray-100'} p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-sm flex items-center">
+                                        <a href="/user/policy/${item.policy_number}" class="hover:text-blue-600 transition-colors">${item.policy_number}</a>
+                                        ${isCurrent ? '<span class="ml-2 text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">Currently Viewing</span>' : ''}
+                                    </h4>
+                                    <span class="text-xs text-gray-500 font-medium">${isFirst ? 'Original Policy' : 'Renewal ' + item.renewal_count}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="inline-flex flex-col items-end">
+                                        <span class="font-extrabold text-sm text-gray-900 mb-0.5">₹${Number(item.final_premium).toLocaleString('en-IN')}</span>
+                                        <span class="flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                                            <span class="w-1.5 h-1.5 rounded-full ${statusColor} mr-1"></span> ${item.status}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-600 flex items-center gap-3 mt-3 bg-white px-3 py-2 rounded-lg border border-gray-100 w-max">
+                                <span><i class="far fa-calendar-alt text-gray-400 mr-1"></i> ${dateStr}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+        } catch (e) { console.error('Failed to load history'); }
+    });
+</script>
+
+<%- include('partials/footer') %>

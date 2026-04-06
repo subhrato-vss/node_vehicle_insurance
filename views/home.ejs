@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+
+<div class="max-w-4xl mx-auto py-12 text-center">
+    <h1 class="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+        Protect Your Ride with <span class="text-blue-600">Confidence</span>
+    </h1>
+    <p class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+        Choose your vehicle type to get a personalized insurance quote in minutes. Quick, easy, and completely digital.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+        <!-- Car Option -->
+        <a href="/vehicle-form?type=car" class="group relative overflow-hidden bg-white p-10 rounded-3xl shadow-xl transition-all hover:shadow-2xl hover:-translate-y-2 border border-gray-100 flex flex-col items-center">
+            <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i class="fas fa-car text-5xl text-blue-600"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-800 mb-3">Car Insurance</h3>
+            <p class="text-gray-500 text-center">Comprehensive coverage for your personal automobiles.</p>
+            <div class="mt-8 flex items-center text-blue-600 font-bold group-hover:gap-2 transition-all">
+                Get Started <i class="fas fa-arrow-right ml-2 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </div>
+        </a>
+
+        <!-- Bike Option -->
+        <a href="/vehicle-form?type=bike" class="group relative overflow-hidden bg-white p-10 rounded-3xl shadow-xl transition-all hover:shadow-2xl hover:-translate-y-2 border border-gray-100 flex flex-col items-center">
+            <div class="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i class="fas fa-motorcycle text-5xl text-indigo-600"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-800 mb-3">Bike Insurance</h3>
+            <p class="text-gray-500 text-center">Robust protection for motorcycles and two-wheelers.</p>
+            <div class="mt-8 flex items-center text-indigo-600 font-bold group-hover:gap-2 transition-all">
+                Get Started <i class="fas fa-arrow-right ml-2 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </div>
+        </a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+        <div class="flex flex-col items-center">
+            <div class="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-bolt text-2xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800">Quick Quoting</h4>
+            <p class="text-gray-500 text-sm">Get your quote in under 2 minutes.</p>
+        </div>
+        <div class="flex flex-col items-center">
+            <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-shield-alt text-2xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800">Full Coverage</h4>
+            <p class="text-gray-500 text-sm">Protection against theft, accidents, and more.</p>
+        </div>
+        <div class="flex flex-col items-center">
+            <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-heart text-2xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800">24/7 Support</h4>
+            <p class="text-gray-500 text-sm">We're here whenever you need us.</p>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
